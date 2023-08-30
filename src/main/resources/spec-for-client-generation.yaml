@@ -1,0 +1,55 @@
+openapi: 3.0.1
+info:
+  title: Kotlin okHttp4 multipart/form-data bug
+  description: Kotlin okHttp4 multipart/form-data bug, objects in "multipart/form-data" not serialized to json
+  version: 1.0.0
+paths:
+  /submit:
+    post:
+      tags:
+        - Report
+      summary: submitReport
+      operationId: submitReport
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ComplexFormData'
+        required: true
+      responses:
+        '200':
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormResponse'
+components:
+  schemas:
+    Metadata:
+      type: object
+      properties:
+        email:
+          type: string
+          example: john@doe.com
+        locale:
+          type: string
+          example: en
+      required:
+        - email
+        - locale
+    ComplexFormData:
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+        report:
+          type: string
+          format: binary
+      required:
+        - metadata
+        - report
+    FormResponse:
+      type: object
+      properties:
+        statusCode:
+          type: string
