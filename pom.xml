@@ -78,6 +78,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/spec-for-client-generation.yaml</inputSpec>
+                            <templateDirectory>${project.basedir}/src/main/openapi-templates</templateDirectory>
                             <generatorName>kotlin</generatorName>
                             <apiPackage>com.example.kotlinokhhtpopenapibug.api</apiPackage>
                             <modelPackage>com.example.kotlinokhhtpopenapibug.api.model</modelPackage>
@@ -125,7 +126,7 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.build.directory}/generated-sources/openapi/src</sourceDir>
+                                <sourceDir>${project.build.directory}/generated-sources/openapi/src/main/kotlin</sourceDir>
                             </sourceDirs>
                         </configuration>
                     </execution>
