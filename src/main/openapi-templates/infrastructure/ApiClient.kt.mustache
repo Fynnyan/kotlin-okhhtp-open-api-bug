@@ -147,13 +147,25 @@ protected inline fun <reified T> requestBody(content: T, mediaType: String?): Re
         )
     {{/jvm-okhttp4}}
     }{{#jvm-okhttp4}}
-    // === START OF CUSTOMIZATION - handle data class to json ===
+        // === START OF CUSTOMIZATION - handle data class to json ===
         else if (part.body != null && part.body::class.isData) {
         val partHeaders = part.headers.toMutableMap() +
         ("Content-Disposition" to "form-data; name=\"$name\"")
         addPart(
-            partHeaders.toHeaders(),
-            parseDateToQueryString(part.body).toRequestBody(JsonMediaType.toMediaTypeOrNull())
+        partHeaders.toHeaders(),
+        {{#moshi}}
+            Serializer.moshi.adapter(T::class.java).toJson(part.body)
+        {{/moshi}}
+        {{#gson}}
+            Serializer.gson.toJson(part.body, T::class.java)
+        {{/gson}}
+        {{#jackson}}
+            Serializer.jacksonObjectMapper.writeValueAsString(part.body)
+        {{/jackson}}
+        {{#kotlinx_serialization}}
+            Serializer.kotlinxSerializationJson.encodeToString(part.body)
+        {{/kotlinx_serialization}}
+            .toRequestBody(JsonMediaType.toMediaTypeOrNull())
         )
     }
     // === END OF CUSTOMIZATION ===
